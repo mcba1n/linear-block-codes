@@ -11,9 +11,10 @@ class Decode:
 
     def ML_decode(self):
         # use syndromes to choose the min distance codeword
-        syndrome_vec = np.mod(np.matmul(self.myLBC.parity_matrix, self.myLBC.y), 2)
+        y = np.array(self.myLBC.likelihoods > 0, dtype=int)  # hard decision
+        syndrome_vec = np.mod(np.matmul(self.myLBC.parity_matrix, y), 2)
         pred_error_vec = self.myLBC.syndromes[syndrome_vec.tostring()]
-        self.myLBC.r = np.mod(self.myLBC.y + pred_error_vec, 2)
+        self.myLBC.r = np.mod(y + pred_error_vec, 2)
         self.myLBC.m_bar = self.myLBC.r[:self.myLBC.K]
 
     def find_syndromes(self):
@@ -21,7 +22,5 @@ class Decode:
         self.myLBC.syndromes = {}
         for i in range(len(enum_bin_vecs)):
             error_vec = np.array(enum_bin_vecs[i], dtype=int)
-            d = sum(error_vec)
-            if d <= self.myLBC.t:   # cannot correct more than t errors
-                syndrome_vec = np.mod(np.matmul(self.myLBC.parity_matrix, np.transpose(error_vec)), 2)
-                self.myLBC.syndromes[syndrome_vec.tostring()] = error_vec
+            syndrome_vec = np.mod(np.matmul(self.myLBC.parity_matrix, np.transpose(error_vec)), 2)
+            self.myLBC.syndromes[syndrome_vec.tostring()] = error_vec

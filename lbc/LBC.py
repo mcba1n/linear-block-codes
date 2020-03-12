@@ -9,13 +9,16 @@ class LBC:
         self.x = None
         self.y = None
         self.m_bar = None
-        print("Linear block code!")
+        self.BER_simulation = np.array([])
+        self.FER_simulation = np.array([])
+        self.codename = code
 
         if code == 'hadamard':
             self.generator = np.transpose(self.canonical_form(self.hadamard()))
             self.parity_matrix = self.to_parity_matrix(np.transpose(self.generator))
-            self.d = int(N / 2)
-            self.t = int(np.floor((self.d - 1) / 2))
+
+    def __str__(self):
+        return '(' + str(self.N) + ',' + str(self.K) + ') ' + self.codename + ' code'
 
     def to_parity_matrix(self, A):
         """

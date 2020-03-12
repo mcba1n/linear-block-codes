@@ -17,7 +17,7 @@ class AWGN:
         self.No = 1
         self.plot_noise = plot_noise
 
-        tx = self.modulation(self.myLBC.u)
+        tx = self.modulation(self.myLBC.x)
         rx = tx + self.noise(self.myLBC.N)
         self.myLBC.likelihoods = np.array(self.get_likelihoods(rx), dtype=np.float64)
 
